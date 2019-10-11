@@ -10,12 +10,12 @@ class Settings():
 		self.ship_speed = 2
 		self.ship_limit = 3
 		self.alien_speed = 1
-		self.alien_down_speed = 60
+		self.alien_down_speed = 20
 		self.alien_direction = 1
 
 		#子弹设置
 		self.bullet_speed_factor = 5
-		self.bullet_width = 500
+		self.bullet_width = 2
 		self.bullet_height = 15
 		self.bullet_color = (60,60,60)
 		self.bullet_allowed = 10

@@ -24,8 +24,9 @@ def run_game():
 
 	while(True):
 		gf.check_events(ai_settings,screen,ship,bullets)
-		gf.update_bullets(ai_settings,screen,aliens,ship,bullets)
-		gf.update_alien(ai_settings,status,screen,ship,aliens,bullets)
+		if status.game_active:
+			gf.update_bullets(ai_settings,screen,aliens,ship,bullets)
+			gf.update_alien(ai_settings,status,screen,ship,aliens,bullets)
 		gf.update_screen(ai_settings,screen,ship,bullets,aliens)
 		#time.sleep(1)
 
