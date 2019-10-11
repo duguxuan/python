@@ -5,7 +5,7 @@ from setting import Settings
 from ship import Ship
 import game_functions as gf
 from pygame.sprite import Group 	
-
+from game_status import GameStatus as Gs
 
 def run_game():
 	pygame.init()
@@ -22,12 +22,15 @@ def run_game():
 	#创建外星人
 	aliens = Group()
 	gf.creat_fleet(ai_settings,screen,aliens,ship)
+	status = Gs(ai_settings)
 
 	while(True):
 		gf.check_events(ai_settings,screen,ship,bullets)
-		gf.update_bullets(bullets)
-		gf.update_alien(aliens)
+		if status.game_active:
+			gf.update_bullets(ai_settings,screen,aliens,ship,bullets)
+			gf.update_alien(ai_settings,status,screen,ship,aliens,bullets)
 		gf.update_screen(ai_settings,screen,ship,bullets,aliens)
+		#time.sleep(1)
 
 
 
