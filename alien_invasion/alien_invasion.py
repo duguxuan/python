@@ -9,6 +9,8 @@ from pygame.sprite import Group
 
 def run_game():
 	pygame.init()
+	print("start")
+
 	ai_settings = Settings()
 	screen = pygame.display.set_mode(ai_settings.screen_size)
 	pygame.display.set_caption("Alien Invasion")
