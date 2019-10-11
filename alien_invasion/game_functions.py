@@ -2,7 +2,8 @@ import sys
 import pygame
 from ship import Ship
 from bullet import Bullet
-from alien import Alien 
+from alien import Alien
+import time
 
 def check_keydown_events(event,ship,ai_settings,screen,bullets):
 	if event.key == pygame.K_RIGHT:
@@ -41,10 +42,25 @@ def update_screen(ai_settings,screen,ship,bullets,aliens):
 		bulet.draw_bullet()
 	pygame.display.flip()
 
-def update_bullets(bullets):
-		for i in bullets.copy():
-			if i.rect.bottom <= 0:
-				bullets.remove(i)
+def check_collision(bullets,aliens):
+	collisions = pygame.sprite.groupcollide(bullets,aliens,True,True)
+	#print(collisions)
+	if collisions:
+		for k in collisions:
+			bullets.remove(k)
+			aliens.remove(collisions[k])
+
+def update_bullets(ai_settings,screen,aliens,ship,bullets):
+	for i in bullets:
+		i.update()
+	for i in bullets.copy():
+		if i.rect.bottom <= 0:
+			bullets.remove(i)
+	check_collision(bullets,aliens)
+	if len(aliens)==0:
+		bullets.empty()
+		creat_fleet(ai_settings,screen,aliens,ship)
+
 
 def creat_bullet(ship,ai_settings,screen,bullets):
 	if len(bullets) < ai_settings.bullet_allowed:
@@ -79,7 +95,20 @@ def creat_fleet(ai_settings,screen,aliens,ship):
 	for y in range(number_y):
 		for x in range(number_x):
 			creat_alien(ai_settings,screen,aliens,x,y)
+			creat_alien(ai_settings, screen, aliens, x, y)
 
-def update_alien(aliens):
+def update_alien(ai_settings,status,screen,ship,aliens,bullets):
 	for i in aliens:
 		i.update()
+	if pygame.sprite.spritecollideany(ship,aliens):
+		print("Ship hit!!!")
+		ship_hit(ai_settings,status,screen,ship,aliens,bullets)
+
+def ship_hit(ai_settings,status,screen,ship,aliens,bullets):
+	status.ship_left -= 1
+	aliens.empty()
+	bullets.empty()
+	creat_fleet(ai_settings, screen, aliens, ship)
+	ship.center_ship()
+	update_screen(ai_settings, screen, ship, bullets, aliens)
+	time.sleep(2)
